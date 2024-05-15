@@ -37,7 +37,7 @@
                                     <td>{{ $user->email }}</td>
                                     <td><img src="{{ asset('storage/images/' . $user->file_url) }}" alt="image" class="img-fluid" style="max-width: 100px;"></td>
                                     <td>
-                                        {{-- <a href="{{route('show',$user->id)}}" class="btn btn-primary btn-sm">Edit</a> --}}
+                                        <a href="{{route('edit',$user->id)}}" class="btn btn-primary btn-sm">Edit</a>
                                     </td>
                                 </tr>
                                 @empty

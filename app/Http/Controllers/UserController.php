@@ -15,7 +15,6 @@ class UserController extends Controller
     {
         $usuarios = User::get();
         return view('index', compact('usuarios'));
-
     }
 
     /**
@@ -23,14 +22,14 @@ class UserController extends Controller
      */
 
 
-     public function create()
+    public function create()
     {
         return view('create');
     }
 
     public function store(UserRequest $request)
     {
-        $fileName = time().'.'.$request->file->extension();
+        $fileName = time() . '.' . $request->file->extension();
 
         //guarda en la imagen en la carpeta public/images
         $request->file->storeAs('public/images', $fileName);
@@ -60,10 +59,49 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+
+    public function edit($id)
     {
-        //
+
+        $user = User::findOrFail($id);
+        return view('edit', compact('user'));
     }
+
+    public function update(UserRequest $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Validar el correo electrónico si se está actualizando
+        if ($request->email != $user->email) {
+            $request->validate([
+                'email' => 'required|email|unique:users,email,' . $user->id,
+            ]);
+        }
+
+        // Actualizar los campos del usuario
+        $user->fullname = $request->fullname;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->social_facebook = $request->social_facebook;
+        $user->social_twitter = $request->social_twitter;
+
+        // Actualizar la contraseña si se proporcionó una nueva
+        if ($request->password) {
+            $user->password = $request->password;
+        }
+
+        // Actualizar la imagen de perfil si se proporcionó una nueva
+        if ($request->hasFile('file')) {
+            $fileName = time() . '.' . $request->file->extension();
+            $request->file->storeAs('public/images', $fileName);
+            $user->file_url = $fileName;
+        }
+
+        $user->save();
+
+        return redirect()->route('index')->with('success', 'Usuario actualizado correctamente');
+    }
+
 
     /**
      * Remove the specified resource from storage.

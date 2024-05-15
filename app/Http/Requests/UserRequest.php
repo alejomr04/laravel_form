@@ -23,14 +23,17 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fullname' => ['required', 'max:100'],
-            'username' => ['required', 'max:100', 'unique:users'],
-            'email' => ['required', 'email', 'unique:users'],
-            'confirm_email' => ['required', 'email', 'same:email'],
-            'file' => ['nullable', File::image()->max(10 * 1024)],
-            'password' => ['required', 'min:8', 'confirmed'],
-            'social_facebook' => ['nullable', 'max:100'],
-            'social_twitter' => ['nullable', 'max:100'],
+
+            
+            'fullname' => 'required|max:100',
+            //Excluye el id si se esta actualizando ese id
+            'username' => 'required|max:100|unique:users,username,' . $this->route('id'),
+            'email' => 'required|email|unique:users,email,' . $this->route('id'),
+            'confirm_email' => 'required|email|same:email',
+            'file' => 'nullable|image|max:10240',
+            'password' => 'nullable|min:8|confirmed',
+            'social_facebook' => 'nullable|max:100',
+            'social_twitter' => 'nullable|max:100',
         ];
     }
 
