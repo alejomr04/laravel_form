@@ -30,7 +30,7 @@ class UserRequest extends FormRequest
             'username' => 'required|max:100|unique:users,username,' . $this->route('id'),
             'email' => 'required|email|unique:users,email,' . $this->route('id'),
             'confirm_email' => 'required|email|same:email',
-            'file' => 'nullable|image|max:10240',
+            'file'=> ['nullable', File::image()->max(10*1024)],
             'password' => 'nullable|min:8|confirmed',
             'social_facebook' => 'nullable|max:100',
             'social_twitter' => 'nullable|max:100',

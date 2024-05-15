@@ -13,6 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        //Trae todos los usuarios.
         $usuarios = User::get();
         return view('index', compact('usuarios'));
     }
@@ -30,11 +31,10 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $fileName = time() . '.' . $request->file->extension();
-
         //guarda en la imagen en la carpeta public/images
         $request->file->storeAs('public/images', $fileName);
 
-        //Ingresar en la bd la imagen y los demas datos
+        //Crea un nuevo User y llena los campos
         $user = new User;
         $user->fullname = $request->fullname;
         $user->username = $request->username;
@@ -62,7 +62,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
-
+        //Para verificar si existe ese id o no
         $user = User::findOrFail($id);
         return view('edit', compact('user'));
     }
@@ -71,24 +71,14 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // Validar el correo electrónico si se está actualizando
-        if ($request->email != $user->email) {
-            $request->validate([
-                'email' => 'required|email|unique:users,email,' . $user->id,
-            ]);
-        }
-
         // Actualizar los campos del usuario
         $user->fullname = $request->fullname;
         $user->username = $request->username;
         $user->email = $request->email;
         $user->social_facebook = $request->social_facebook;
         $user->social_twitter = $request->social_twitter;
-
-        // Actualizar la contraseña si se proporcionó una nueva
-        if ($request->password) {
-            $user->password = $request->password;
-        }
+        $user->email = $request->email;
+        $user->password = $request->password;
 
         // Actualizar la imagen de perfil si se proporcionó una nueva
         if ($request->hasFile('file')) {
@@ -96,10 +86,10 @@ class UserController extends Controller
             $request->file->storeAs('public/images', $fileName);
             $user->file_url = $fileName;
         }
-
+        //Guarda en la base de datos
         $user->save();
 
-        return redirect()->route('index')->with('success', 'Usuario actualizado correctamente');
+        return redirect()->route('index');
     }
 
 
