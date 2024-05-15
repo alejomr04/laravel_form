@@ -17,6 +17,7 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card shadow">
+                    <a href="{{ route('create') }}" class="btn btn-secondary mb-3">Crear Nuevo usuario</a>
                     <div class="card-header bg-primary text-white">
                         <h4 class="mb-0">Usuarios Registrados en la Base de Datos</h4>
                     </div>
