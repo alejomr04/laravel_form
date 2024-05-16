@@ -11,9 +11,12 @@
 
 <style>
     #file-img {
-        width: 100px;
-        border-radius: 50%;
-    }
+  width: 150px; /* Ajusta el ancho deseado */
+  height: 150px; /* La altura debe ser igual al ancho para un círculo perfecto */
+  border-radius: 50%;
+  object-fit: cover; /* Esto mantiene la relación de aspecto de la imagen */
+  overflow: hidden; /* Oculta cualquier parte de la imagen que se desborde */
+}
     label {
         font-family: sans-serif;
     }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Editar Usuario</title>
+    <title>Registrar usuario</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -61,7 +61,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-image"></i></span>
                                                 
-                                            <input type="file" class="form-control" id="file" name="file" placeholder="Imagen de perfil" onchange="previewImage(event)">
+                                            <input type="file" class="form-control" id="file" name="file" placeholder="Imagen de perfil" onchange="previewImage(event)" required>
                                         </div>
                                             @error('file')
                                                 <div class="text-danger">{{ $message }}</div>
