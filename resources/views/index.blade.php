@@ -17,10 +17,7 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card shadow">
-                    <a href="{{ route('create') }}" class="btn btn-secondary mb-3">Crear Nuevo usuario</a>
-                    <div class="card-header bg-primary text-white">
-                        <h4 class="mb-0">Usuarios Registrados en la Base de Datos</h4>
-                    </div>
+                    <a href="{{ route('create') }}" class="btn btn-success mb-4">Crear Nuevo usuario</a>
                     <div class="card-body">
                         <table class="table table-hover">
                             <thead class="bg-light">
@@ -38,7 +35,8 @@
                                     <td>{{ $user->email }}</td>
                                     <td><img src="{{ asset('storage/images/' . $user->file_url) }}" alt="image" class="img-fluid" style="max-width: 100px;"></td>
                                     <td>
-                                        <a href="{{route('edit',$user->id)}}" class="btn btn-primary btn-sm">Edit</a>
+                                        <a href="{{route('edit',$user->id)}}" class="btn btn-primary btn-sm">Ver y editar</a>
+                                        <a href="{{route('destroy',$user->id)}}" class="btn btn-danger btn-sm">Eliminar</a>
                                     </td>
                                 </tr>
                                 @empty

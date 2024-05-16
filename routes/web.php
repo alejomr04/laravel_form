@@ -25,3 +25,5 @@ Route::post('/store',[UserController::class, 'store'])->name('store');
 
 Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
 Route::put('/update/{id}', [UserController::class, 'update'])->name('update');
+
+Route::get('/destroy/{id}', [UserController::class, 'destroy'])->name('destroy');

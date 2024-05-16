@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,91 +6,212 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Editar Usuario</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+
+<style>
+    #file-img {
+        width: 100px;
+        border-radius: 50%;
+    }
+    label {
+        font-family: sans-serif;
+    }
+    .preview-container {
+    position: relative;
+    width: 200px; /* Ajusta el ancho deseado */
+    height: 200px; /* Ajusta la altura deseada */
+    margin: 0 auto; /* Centra horizontalmente el contenedor */
+    margin-top: 10px
+
+}
+
+.preview-image {
+    border-radius: 10px;
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#cart{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 20px;
+}
+</style>
+
 <body>
     <div class="container my-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="mb-0">Editar Usuario</h4>
-                    </div>
+            <div class="col-md-12">
+                <div class="text-center mt-2 justify-content-center">
+                    <h4 class="mt-3 mb-4 f-2"><strong> Editar perfil</strong></h4>
+                </div>
+                <div class="container" id="cart">
+                    
                     <div class="card-body">
                         <form action="{{ route('update', $user->id) }}" method="POST" enctype="multipart/form-data">
                             @method('put')
                             @csrf
-                            <div class="mb-3">
-                                <label for="fullname" class="form-label">Nombre completo</label>
-                                <input type="text" class="form-control" id="fullname" name="fullname" value="{{ $user->fullname }}">
-                                @error('fullname')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <div class="justify-content-center text-center">
+                                            <strong><p style="margin-bottom: 0 !important;">{{ $user->fullname }}</p></strong>
+                                            <p>{{'@'.$user->username}}</p>
+                                            <img src="{{ asset('storage/images/' . $user->file_url) }}" class="img-fluid m-2 " id="file-img" alt="image">
+                                        </div>
+                                        
+                                            <div class="text-center mt-3">
+                                                <label for="file" class="form-label"><strong>Nueva foto de perfil:</strong></label>
+                                            </div>
+                                            <input type="file" class="form-control" id="file" name="file" placeholder="Imagen de perfil" onchange="previewImage(event)">
+                                            @error('file')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                            <p class="mt-3">Foto de perfil seleccionada:</p>
+                                            <div class="preview-container">
+                                                <img id="preview-image" class="preview-image" src="#" alt="Vista previa de la imagen" style="display: none;">
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mt-0">
+                                    <div class="mb-3">
+                                        <label for="fullname" class="form-label">Nombre completo</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            </div>
+                                        <input type="text" class="form-control" id="fullname" name="fullname" value="{{ $user->fullname }}">
+                                        </div>
+
+                                        @error('fullname')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label">Nombre de usuario</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-at"></i></span>
+                                            </div>
+                                        <input type="text" class="form-control" id="username" name="username" value="{{ $user->username }}">
+                                    </div>
+                                        @error('username')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="email" class="form-label">Correo electrónico</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                                </div>
+                                            <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}">
+                                        </div>
+                                            @error('email')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="confirm_email" class="form-label">Confirmar correo electrónico</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-envelope-open"></i></span>
+                                                </div>
+                                            <input type="email" class="form-control" id="confirm_email" name="confirm_email" placeholder="Confirmar correo electrónico">
+                                        </div>
+                                            @error('confirm_email')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="password" class="form-label">Contraseña</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                                </div>
+                                            <input type="text" class="form-control" id="password" name="password" value="{{ $user->password }}">
+                                        </div>
+                                            @error('password')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="password_confirmation" class="form-label">Confirmar contraseña</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                                </div>
+                                            <input type="text" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirmar contraseña">
+                                        </div>
+                                            @error('password_confirmation')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="social_facebook" class="form-label">Usuario de Facebook</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fab fa-facebook"></i></span>
+                                            </div>
+                                        <input type="text" class="form-control" id="social_facebook" name="social_facebook" value="{{ $user->social_facebook }}">
+                                    </div>
+                                        @error('social_facebook')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="social_twitter" class="form-label">Usuario de Twitter</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fab fa-twitter"></i></span>
+                                            </div>
+                                        <input type="text" class="form-control" id="social_twitter" name="social_twitter" value="{{ $user->social_twitter }}">
+                                    </div>
+                                        @error('social_twitter')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    </div>
+                                    <div class="col-md-12 text-center mt-3">
+                                        <button type="submit" class="btn btn-success">Actualizar</button>
+                                    </div>
+                                </div>
+                                    
+
                             </div>
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Nombre de usuario</label>
-                                <input type="text" class="form-control" id="username" name="username" value="{{ $user->username }}">
-                                @error('username')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Correo electrónico</label>
-                                <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}">
-                                @error('email')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="confirm_email" class="form-label">Confirmar correo electrónico</label>
-                                <input type="email" class="form-control" id="confirm_email" name="confirm_email" placeholder="Confirmar correo electrónico">
-                                @error('confirm_email')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="file" class="form-label">Imagen de perfil</label>
-                                <input type="file" class="form-control" id="file" name="file" placeholder="Imagen de perfil">
-                                @error('file')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                                <img src="{{ asset('storage/images/' . $user->file_url) }}" alt="image">
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
-                                <input type="text" class="form-control" id="password" name="password" value="{{ $user->password }}">
-                                @error('password')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="password_confirmation" class="form-label">Confirmar contraseña</label>
-                                <input type="text" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirmar contraseña">
-                                @error('password_confirmation')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="social_facebook" class="form-label">Usuario de Facebook</label>
-                                <input type="text" class="form-control" id="social_facebook" name="social_facebook" value="{{ $user->social_facebook }}">
-                                @error('social_facebook')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="social_twitter" class="form-label">Usuario de Twitter</label>
-                                <input type="text" class="form-control" id="social_twitter" name="social_twitter" value="{{ $user->social_twitter }}">
-                                @error('social_twitter')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                            
                         </form>
+                        <div class="col-md-12 text-center mt-3">
+                            <a href="{{ route('index') }}" class="btn btn-secondary">Volver</a>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    <script>
+        // Script para cargar la imagen
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var preview = document.getElementById('preview-image');
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>
 </html>
